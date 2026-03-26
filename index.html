@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NEXPARK · Smart Parking System</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- Animated grid background -->
+  <div class="bg-grid"></div>
+  <div class="scanline"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-mark">NX</div>
+      <div class="header-titles">
+        <h1 class="logo">NEXPARK</h1>
+        <span class="tagline">UNDERGROUND SMART PARKING · CONTROL SYSTEM v2.4</span>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-pill" id="stat-bikes">
+        <span class="stat-icon">🏍</span>
+        <span class="stat-label">BIKES</span>
+        <span class="stat-val" id="bike-avail">48</span>
+        <span class="stat-total">/ 48</span>
+      </div>
+      <div class="stat-pill" id="stat-cars-f2">
+        <span class="stat-icon">🚗</span>
+        <span class="stat-label">F-2</span>
+        <span class="stat-val" id="car-f2-avail">24</span>
+        <span class="stat-total">/ 24</span>
+      </div>
+      <div class="stat-pill" id="stat-cars-f3">
+        <span class="stat-icon">🚗</span>
+        <span class="stat-label">F-3</span>
+        <span class="stat-val" id="car-f3-avail">24</span>
+        <span class="stat-total">/ 24</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <main class="main-layout">
+
+    <!-- LEFT: Control Panel -->
+    <aside class="control-panel">
+      <div class="panel-section">
+        <div class="panel-label">VEHICLE ENTRY</div>
+        <button class="btn btn-bike" id="btn-park-bike">
+          <span class="btn-icon">🏍</span>
+          <span class="btn-text">PARK BIKE<br><small>Floor -1</small></span>
+        </button>
+        <button class="btn btn-car" id="btn-park-car">
+          <span class="btn-icon">🚗</span>
+          <span class="btn-text">PARK CAR<br><small>Floor -2 / -3</small></span>
+        </button>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-label">VEHICLE EXIT</div>
+        <button class="btn btn-exit" id="btn-exit">
+          <span class="btn-icon">🚪</span>
+          <span class="btn-text">EXIT VEHICLE<br><small>Select a slot</small></span>
+        </button>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-label">LEGEND</div>
+        <div class="legend">
+          <div class="legend-item"><span class="swatch empty"></span>Available</div>
+          <div class="legend-item"><span class="swatch occupied-bike"></span>Bike Parked</div>
+          <div class="legend-item"><span class="swatch occupied-car"></span>Car Parked</div>
+          <div class="legend-item"><span class="swatch highlighted"></span>Assigned Slot</div>
+          <div class="legend-item"><span class="swatch path"></span>Vehicle Path</div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-label">ACTIVITY LOG</div>
+        <div class="log-box" id="log-box">
+          <div class="log-entry init">◈ NEXPARK SYSTEM ONLINE</div>
+          <div class="log-entry init">◈ ALL FLOORS OPERATIONAL</div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-label">ALGORITHM</div>
+        <div class="algo-info">
+          <div class="algo-badge">GREEDY + BFS</div>
+          <p>Nearest slot selected via BFS graph traversal from entry node. Path highlighted in real time.</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT: Parking Floors -->
+    <section class="floors-section">
+
+      <!-- Entry Point Visual -->
+      <div class="entry-zone">
+        <div class="entry-label">▼ ENTRY / EXIT POINT</div>
+        <div class="entry-road">
+          <div class="vehicle-animator" id="vehicle-animator">
+            <div class="animated-vehicle" id="animated-vehicle"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floor -1: Bikes -->
+      <div class="floor-card" id="floor-1">
+        <div class="floor-header">
+          <div class="floor-tag f1-tag">B1</div>
+          <div class="floor-info">
+            <span class="floor-name">FLOOR −1 · MOTORCYCLE DECK</span>
+            <span class="floor-meta">48 SLOTS · 4 ROWS · BIKES ONLY</span>
+          </div>
+          <div class="floor-counter">
+            <span id="f1-count">48</span> <small>FREE</small>
+          </div>
+        </div>
+        <div class="floor-road">
+          <div class="road-stripe"></div>
+          <div class="road-label">ACCESS LANE B1</div>
+        </div>
+        <div class="floor-grid" id="grid-f1">
+          <!-- Rows generated by JS -->
+        </div>
+      </div>
+
+      <!-- Floor -2: Cars -->
+      <div class="floor-card" id="floor-2">
+        <div class="floor-header">
+          <div class="floor-tag f2-tag">C1</div>
+          <div class="floor-info">
+            <span class="floor-name">FLOOR −2 · AUTOMOBILE DECK A</span>
+            <span class="floor-meta">24 SLOTS · 2 ROWS · CARS ONLY</span>
+          </div>
+          <div class="floor-counter">
+            <span id="f2-count">24</span> <small>FREE</small>
+          </div>
+        </div>
+        <div class="floor-road">
+          <div class="road-stripe"></div>
+          <div class="road-label">ACCESS LANE C1</div>
+        </div>
+        <div class="floor-grid" id="grid-f2">
+        </div>
+      </div>
+
+      <!-- Floor -3: Cars -->
+      <div class="floor-card" id="floor-3">
+        <div class="floor-header">
+          <div class="floor-tag f3-tag">C2</div>
+          <div class="floor-info">
+            <span class="floor-name">FLOOR −3 · AUTOMOBILE DECK B</span>
+            <span class="floor-meta">24 SLOTS · 2 ROWS · CARS ONLY</span>
+          </div>
+          <div class="floor-counter">
+            <span id="f3-count">24</span> <small>FREE</small>
+          </div>
+        </div>
+        <div class="floor-road">
+          <div class="road-stripe"></div>
+          <div class="road-label">ACCESS LANE C2</div>
+        </div>
+        <div class="floor-grid" id="grid-f3">
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Exit Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-title">SELECT VEHICLE TO EXIT</div>
+      <div class="modal-body" id="modal-body"></div>
+      <button class="btn btn-exit modal-close" id="modal-close">CANCEL</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
